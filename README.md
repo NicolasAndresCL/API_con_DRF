@@ -36,7 +36,6 @@ Si aún no lo has hecho, clona este repositorio en tu máquina local:
 git clone https://github.com/NicolasAndresCL/API_con_DRF.git
 cd API_con_DRF
 
-(Reemplaza tu-usuario y nombre-de-tu-repo con los datos de tu repositorio en GitHub.)
 
 2. Crear y Activar el Entorno Virtual
 Es fundamental usar un entorno virtual para gestionar las dependencias del proyecto de forma aislada.
@@ -45,7 +44,7 @@ python -m venv env
 
 Activa el entorno virtual:
 
-En Windows (CMD/PowerShell):
+En Windows (CMD/PowerShell) *Yo uso CMDER:
 
 .\env\Scripts\activate
 
