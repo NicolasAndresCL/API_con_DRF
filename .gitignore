@@ -1,0 +1,57 @@
+# Archivos de la base de datos
+*.sqlite3
+
+# Archivos de entornos virtuales
+/env/
+/.venv/
+/venv/
+
+# Archivos y carpetas de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python/
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+.env/
+
+# Archivos de Django
+*.log
+*.pot
+*.mo
+*.js.map
+*.css.map
+staticfiles/
+media/
+.idea/ # Para usuarios de PyCharm
+*.sublime-project
+*.sublime-workspace
+.vscode/ # Configuración específica de VS Code si no quieres compartirla
+.DS_Store # Archivos de macOS
+
+# Archivos de migraciones (excepto el __init__.py)
+*.py[co]
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Archivos de usuario subidos
+/media/
+
+# Archivos de Pytest/Cobertura
+.pytest_cache/
+.coverage
+
+# Archivos generados por Node/Vite (si los tuvieras en el mismo repo)
+/node_modules/
+/dist/
