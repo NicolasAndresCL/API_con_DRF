@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # URLs de las apps bajo un prefijo '/api/'
     path('api/', include("customers.urls")),
+    path('api/', include("orders.urls")),  
     path('api/', include("products.urls")), 
 
     # Endpoint para obtener un token (requiere POST con username y password)

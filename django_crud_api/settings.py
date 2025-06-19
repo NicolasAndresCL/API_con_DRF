@@ -37,12 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
+    'corsheaders',  # Middleware para manejar CORS
     'customers',  # Aplicación personalizada para manejar clientes
     'products',  # Aplicación personalizada para manejar productos
-    'rest_framework',
+    'orders', # Aplicación personalizada para manejar pedidos
+    'rest_framework', # Django REST Framework
     'rest_framework.authtoken',  # Para autenticación basada en tokens
-    'drf_spectacular',
+    'drf_spectacular', # Para generar documentación OpenAPI
 ]
 
 MIDDLEWARE = [
@@ -147,8 +148,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'API con DRF',  # <--- Este es el título que aparecerá en Swagger UI
-    'DESCRIPTION': 'Documentación de la API para la gestión de clientes y productos con Django REST Framework.', # <--- Opcional: una descripción
+    'TITLE': 'API de Gestión de Clientes, Pedidos y Productos',
+    'DESCRIPTION': 'Documentación de la API RESTful para la gestión integral de clientes, la administración de pedidos y el catálogo de productos.', # <--- Opcional: una descripción
     'VERSION': '1.0.0', # <--- Opcional: la versión de tu API
     'SERVE_INCLUDE_SCHEMA': False, # Opcional: para no incluir el esquema OpenAPI directamente en la página
     # Otras configuraciones si las necesitas, por ejemplo para autenticación:

@@ -3,7 +3,7 @@ from rest_framework import viewsets
 # Importa también 'AllowAny' para permitir acceso sin autenticación
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.exceptions import ValidationError
-from .models import Customer, Order
+from .models import Customer
 from .serializers import CustomerSerializer
 
 class CustomerView(viewsets.ModelViewSet):
