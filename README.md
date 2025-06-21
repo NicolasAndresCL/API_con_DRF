@@ -1,7 +1,7 @@
-API con DRF para Gestión de Clientes y Pedidos
+# API con DRF para Gestión de Clientes y Pedidos
 Este proyecto es una API RESTful desarrollada con Django y Django REST Framework, diseñada para gestionar clientes y sus pedidos asociados. Incluye una base de datos de clientes profesional y una interfaz de documentación interactiva (Swagger UI) para facilitar la exploración y prueba de los endpoints.
 
-🚀 Tecnologías Utilizadas
+### **🚀 Tecnologías Utilizadas**
 Python: Lenguaje de programación principal.
 
 Django: Framework web de alto nivel para un desarrollo rápido y limpio.
