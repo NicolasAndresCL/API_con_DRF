@@ -7,6 +7,7 @@ drf-spectacular==0.28.0
 inflection==0.5.1
 jsonschema==4.24.0
 jsonschema-specifications==2025.4.1
+mysqlclient==2.2.7
 PyYAML==6.0.2
 referencing==0.36.2
 rpds-py==0.25.1
