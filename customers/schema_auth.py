@@ -1,16 +1,26 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiExample
 from rest_framework.permissions import AllowAny
-from rest_framework.authtoken.views import obtain_auth_token
-from drf_spectacular.utils import extend_schema
 
-@extend_schema(
-    tags=["Autenticación"],
-    summary="Obtener token de autenticación",
-    description="Recibe username y password, y retorna un token para autenticación.",
-    request={"application/json": {"username": "usuario", "password": "contraseña"}},
-    responses={200: {"token": "abc123xyz"}}
+@extend_schema_view(
+    post=extend_schema(
+        tags=["Autenticación"],
+        summary="Obtener access y refresh token (JWT)",
+        description="Autenticación vía JWT. Requiere username y password válidos.",
+        request=TokenObtainPairSerializer,
+        responses={200: None},
+        examples=[
+            OpenApiExample(
+                name="Login ejemplo",
+                request_only=True,
+                value={"username": "admin", "password": "admin123"},
+            )
+        ],
+    )
 )
-@api_view(["POST"])
-@permission_classes([AllowAny])
-def decorated_obtain_auth_token(request):
-    return obtain_auth_token(request)
+class DecoratedTokenObtainPairView(TokenObtainPairView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)

@@ -55,3 +55,5 @@ media/
 # Archivos generados por Node/Vite (si los tuvieras en el mismo repo)
 /node_modules/
 /dist/
+
+.env

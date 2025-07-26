@@ -1,0 +1,1022 @@
+openapi: 3.0.3
+info:
+  title: API de Gestión de Clientes, Pedidos y Productos
+  version: 1.0.0
+  description: Documentación técnica para la gestión integral de clientes, pedidos
+    y productos.
+paths:
+  /api/customers/:
+    get:
+      operationId: api_customers_list
+      description: Devuelve todos los clientes registrados.
+      summary: Listar clientes
+      tags:
+      - Customers
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+          description: ''
+    post:
+      operationId: api_customers_create
+      description: Registra un nuevo cliente. Requiere autenticación.
+      summary: Crear cliente
+      tags:
+      - Customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+  /api/customers/{id}/:
+    get:
+      operationId: api_customers_retrieve
+      description: Muestra un cliente por ID.
+      summary: Obtener cliente
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Cliente.
+        required: true
+      tags:
+      - Customers
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+    put:
+      operationId: api_customers_update
+      description: Reemplaza todos los datos. Requiere permisos de administrador.
+      summary: Actualizar cliente
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Cliente.
+        required: true
+      tags:
+      - Customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+    patch:
+      operationId: api_customers_partial_update
+      description: Modifica algunos campos. Requiere permisos de administrador.
+      summary: Actualización parcial
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Cliente.
+        required: true
+      tags:
+      - Customers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomerRequest'
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+    delete:
+      operationId: api_customers_destroy
+      description: Solo si no tiene pedidos pendientes. Requiere permisos de administrador.
+      summary: Eliminar cliente
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Cliente.
+        required: true
+      tags:
+      - Customers
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/login/:
+    post:
+      operationId: api_login_create
+      description: Autenticación vía JWT. Requiere username y password válidos.
+      summary: Obtener access y refresh token (JWT)
+      tags:
+      - Autenticación
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+            examples:
+              LoginEjemplo:
+                value:
+                  username: admin
+                  password: admin123
+                summary: Login ejemplo
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPairRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/orders/:
+    get:
+      operationId: api_orders_list
+      description: Devuelve todas las órdenes registradas, con datos de cliente y
+        productos.
+      summary: Listar órdenes
+      tags:
+      - Orders
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+          description: ''
+    post:
+      operationId: api_orders_create
+      description: Registra una nueva orden asociada a un cliente. Puede incluir múltiples
+        productos.
+      summary: Crear orden
+      tags:
+      - Orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/orders/{id}/:
+    get:
+      operationId: api_orders_retrieve
+      description: Devuelve una orden específica por ID, incluyendo cliente y productos
+        relacionados.
+      summary: Obtener orden
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - Orders
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    put:
+      operationId: api_orders_update
+      description: Reemplaza completamente los datos de una orden existente.
+      summary: Actualizar orden
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - Orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    patch:
+      operationId: api_orders_partial_update
+      description: Modifica parcialmente los datos de una orden existente.
+      summary: Actualizar parcialmente orden
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - Orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderRequest'
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    delete:
+      operationId: api_orders_destroy
+      description: Elimina una orden por ID. Puede estar restringido según estado
+        o relaciones.
+      summary: Eliminar orden
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - Orders
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/products/:
+    get:
+      operationId: api_products_list
+      description: Listado público de productos disponibles.
+      summary: Listar productos
+      tags:
+      - Products
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          description: ''
+    post:
+      operationId: api_products_create
+      description: Creación de producto con validación de stock inicial.
+      summary: Crear producto
+      tags:
+      - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/{id}/:
+    get:
+      operationId: api_products_retrieve
+      description: Detalle de producto por ID.
+      summary: Obtener producto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - Products
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    put:
+      operationId: api_products_update
+      description: Actualiza todos los datos del producto, aplicando lógica de stock
+        y visibilidad.
+      summary: Actualizar producto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    patch:
+      operationId: api_products_partial_update
+      description: Modifica parcialmente los datos del producto.
+      summary: Actualizar parcialmente producto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProductRequest'
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    delete:
+      operationId: api_products_destroy
+      description: Elimina un producto por ID. Requiere autenticación.
+      summary: Eliminar producto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - Products
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/products/{id}/increase_stock/:
+    post:
+      operationId: api_products_increase_stock_create
+      description: Suma una cantidad específica al stock actual del producto.
+      summary: Incrementar stock del producto
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/{id}/mark_sold_out/:
+    put:
+      operationId: api_products_mark_sold_out_update
+      description: Marca un producto como inactivo si su stock es cero.
+      summary: Marcar producto como agotado
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this product.
+        required: true
+      tags:
+      - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          title: Nombre
+          maxLength: 100
+        last_name:
+          type: string
+          title: Apellido
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          title: Correo Electrónico
+          maxLength: 254
+        phone_number:
+          type: string
+          nullable: true
+          title: Número de Teléfono
+          maxLength: 20
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          title: Fecha de Nacimiento
+        address_line_1:
+          type: string
+          nullable: true
+          title: Dirección Línea 1
+          maxLength: 255
+        address_line_2:
+          type: string
+          nullable: true
+          title: Dirección Línea 2
+          maxLength: 255
+        city:
+          type: string
+          nullable: true
+          title: Ciudad
+          maxLength: 100
+        state_province:
+          type: string
+          nullable: true
+          title: Estado/Provincia
+          maxLength: 100
+        postal_code:
+          type: string
+          nullable: true
+          title: Código Postal
+          maxLength: 20
+        country:
+          type: string
+          title: País
+          maxLength: 100
+        is_active:
+          type: boolean
+          title: Activo
+        date_joined:
+          type: string
+          format: date-time
+          title: Fecha de Registro
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Última Actualización
+        notes:
+          type: string
+          nullable: true
+          title: Notas Adicionales
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+      - last_updated
+    CustomerRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          title: Nombre
+          maxLength: 100
+        last_name:
+          type: string
+          minLength: 1
+          title: Apellido
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Correo Electrónico
+          maxLength: 254
+        phone_number:
+          type: string
+          nullable: true
+          title: Número de Teléfono
+          maxLength: 20
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          title: Fecha de Nacimiento
+        address_line_1:
+          type: string
+          nullable: true
+          title: Dirección Línea 1
+          maxLength: 255
+        address_line_2:
+          type: string
+          nullable: true
+          title: Dirección Línea 2
+          maxLength: 255
+        city:
+          type: string
+          nullable: true
+          title: Ciudad
+          maxLength: 100
+        state_province:
+          type: string
+          nullable: true
+          title: Estado/Provincia
+          maxLength: 100
+        postal_code:
+          type: string
+          nullable: true
+          title: Código Postal
+          maxLength: 20
+        country:
+          type: string
+          minLength: 1
+          title: País
+          maxLength: 100
+        is_active:
+          type: boolean
+          title: Activo
+        date_joined:
+          type: string
+          format: date-time
+          title: Fecha de Registro
+        notes:
+          type: string
+          nullable: true
+          title: Notas Adicionales
+      required:
+      - email
+      - first_name
+      - last_name
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        customer:
+          type: integer
+        order_date:
+          type: string
+          format: date-time
+          readOnly: true
+        total_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+      required:
+      - customer
+      - id
+      - items
+      - order_date
+      - status
+      - total_amount
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        price_at_order:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+      required:
+      - id
+      - price_at_order
+      - product
+    OrderItemRequest:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          writeOnly: true
+        quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+      required:
+      - product_id
+    OrderRequest:
+      type: object
+      properties:
+        customer:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemRequest'
+      required:
+      - customer
+      - items
+    PatchedCustomerRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          title: Nombre
+          maxLength: 100
+        last_name:
+          type: string
+          minLength: 1
+          title: Apellido
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Correo Electrónico
+          maxLength: 254
+        phone_number:
+          type: string
+          nullable: true
+          title: Número de Teléfono
+          maxLength: 20
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+          title: Fecha de Nacimiento
+        address_line_1:
+          type: string
+          nullable: true
+          title: Dirección Línea 1
+          maxLength: 255
+        address_line_2:
+          type: string
+          nullable: true
+          title: Dirección Línea 2
+          maxLength: 255
+        city:
+          type: string
+          nullable: true
+          title: Ciudad
+          maxLength: 100
+        state_province:
+          type: string
+          nullable: true
+          title: Estado/Provincia
+          maxLength: 100
+        postal_code:
+          type: string
+          nullable: true
+          title: Código Postal
+          maxLength: 20
+        country:
+          type: string
+          minLength: 1
+          title: País
+          maxLength: 100
+        is_active:
+          type: boolean
+          title: Activo
+        date_joined:
+          type: string
+          format: date-time
+          title: Fecha de Registro
+        notes:
+          type: string
+          nullable: true
+          title: Notas Adicionales
+    PatchedOrderRequest:
+      type: object
+      properties:
+        customer:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemRequest'
+    PatchedProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_active:
+          type: boolean
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - price
+      - updated_at
+    ProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        stock:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_active:
+          type: boolean
+      required:
+      - name
+      - price
+    StatusEnum:
+      enum:
+      - pending
+      - shipped
+      - delivered
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - Pendiente
+        * `shipped` - Enviado
+        * `delivered` - Entregado
+        * `cancelled` - Cancelado
+    TokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

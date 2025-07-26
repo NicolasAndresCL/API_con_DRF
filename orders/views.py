@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from .models import Order
 from .serializers import OrderSerializer
+from rest_framework.permissions import IsAuthenticated
 
 @extend_schema_view(
     list=extend_schema(
@@ -38,3 +39,4 @@ from .serializers import OrderSerializer
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]

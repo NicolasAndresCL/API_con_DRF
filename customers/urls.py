@@ -1,12 +1,13 @@
+# customers/urls.py
 from django.urls import path, include
-from rest_framework.routers import SimpleRouter 
+from rest_framework.routers import SimpleRouter
 from customers.views import CustomerView
-from .schema_auth import decorated_obtain_auth_token
+from customers.schema_auth import DecoratedTokenObtainPairView
 
 router = SimpleRouter()
 router.register(r"customers", CustomerView, basename="customers")
 
 urlpatterns = [
-    path("token/", decorated_obtain_auth_token, name="obtain_token"),
     path("", include(router.urls)),
+    path("login/", DecoratedTokenObtainPairView.as_view(), name="token_obtain_pair"),
 ]

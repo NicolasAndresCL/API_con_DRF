@@ -179,3 +179,8 @@ class CustomerModelTest(TestCase):
 
         self.assertFalse(Customer.objects.filter(id=customer_to_delete.id).exists())
         self.assertEqual(Customer.objects.count(), 1) # Solo queda el self.customer del setUp
+
+    def test_obtain_jwt_token(api_client):
+        response = api_client.post("/api/customers/token/", data={"username": "admin", "password": "admin123"})
+        assert response.status_code == 200
+        assert "access" in response.data
