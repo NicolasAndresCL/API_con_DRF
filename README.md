@@ -1,102 +1,158 @@
-# API con DRF para Gestión de Clientes y Pedidos
-Este proyecto es una API RESTful desarrollada con Django y Django REST Framework, diseñada para gestionar clientes y sus pedidos asociados. Incluye una base de datos de clientes profesional y una interfaz de documentación interactiva (Swagger UI) para facilitar la exploración y prueba de los endpoints.
+# 🧠 API RESTful en Django DRF: Gestión Modular de Clientes y Pedidos
+Este proyecto es una API RESTful desarrollada con Django y Django REST Framework, orientada a la gestión de clientes y sus pedidos, bajo una arquitectura modular por dominio. La documentación interactiva está generada automáticamente mediante drf-spectacular, agrupada en Swagger UI por funcionalidades.
 
-### **🚀 Tecnologías Utilizadas**
-Python: Lenguaje de programación principal.
+```
+API_con_DRF/
+├── customers/                  # App para gestión de clientes
+│   ├── migrations/             # Migraciones del modelo Customer
+│   ├── __init__.py
+│   ├── models.py               # Modelo Customer
+│   ├── serializers.py          # Serializador de clientes
+│   ├── views.py                # CustomerViewSet con permisos y validación
+│   ├── urls.py                 # Rutas /api/customers/
+│   ├── apps.py                 # Registro de esquema personalizado
+│   ├── auth_schema.py          # Vista decorada para token authentication (Swagger visible)
+│   └── tests.py
+│
+├── orders/                    # App para gestión de pedidos
+│   ├── migrations/
+│   ├── __init__.py
+│   ├── models.py               # Modelo Order
+│   ├── serializers.py
+│   ├── signals.py
+│   ├── views.py                # OrderViewSet con documentación extendida
+│   ├── urls.py
+│   └── tests.py
+│
+├── products/                  # App para gestión de productos
+│   ├── migrations/
+│   ├── __init__.py
+│   ├── models.py               # Modelo Product
+│   ├── serializers.py
+│   ├── views.py                # ProductViewSet con lógica de stock y acciones personalizadas
+│   ├── urls.py
+│   └── tests.py
+│
+├── django_crud_api/           # Proyecto principal
+│   ├── __init__.py
+│   ├── settings.py             # Configuración global: DRF, CORS, Swagger
+│   ├── urls.py                 # Rutas centrales: Swagger, /api/token/, modularización por apps
+│   ├── wsgi.py
+│   └── asgi.py
+│
+├── db.sqlite3                 # Base de datos local (desarrollo)
+├── manage.py                  # Script principal para comandos Django
+├── requirements.txt           # Dependencias del proyecto
+└── README.md                  # Documentación técnica y guía de instalación
 
-Django: Framework web de alto nivel para un desarrollo rápido y limpio.
+```
+## 🚀 Tecnologías Utilizadas
 
-Django REST Framework (DRF): Potente y flexible toolkit para construir APIs web.
+|Tecnología             	|Propósito                                                       |
+|:-------------------------:|----------------------------------------------------------------|
+|**Python**	                |Lenguaje principal del proyecto                                 |
+|**Django**	                |Framework web robusto y escalable                               |
+|**Django REST Framework**  |	Toolkit flexible para APIs                                   |
+|**drf-spectacular**	    |Generación automática de documentación OpenAPI 3.0 + Swagger UI |
+|**django-cors-headers**	|Configuración segura para CORS                                  |
+|**SQLite3**	            |Base de datos default para entorno local                        |
+|**Docker** (opcional)	    |Contenedorización para despliegue eficiente                     |
+|**Git**	                |Control de versiones con flujo main/dev y commits convencionales|
+|**venv**	                |Entornos virtuales para aislamiento limpio                      |
 
-django-cors-headers: Manejo de Cross-Origin Resource Sharing (CORS) para permitir solicitudes desde diferentes dominios.
+## ✨ Características Principales
+🔹 CRUD completo en modelos Customer y Order, con relaciones entre ellos.
 
-drf-spectacular: Generación automática de documentación OpenAPI 3.0 (Swagger UI) para la API.
+🔹 Modularización por dominio (customers, orders) mediante SimpleRouter y apps independientes.
 
-SQLite3: Base de datos predeterminada para desarrollo.
+🔹 Documentación extendida con @extend_schema, tags, summary, description por acción HTTP.
 
-Git: Control de versiones.
+🔹 Endpoint de autenticación (POST /api/token/) separado en schema_auth.py con visibilidad asegurada en Swagger.
 
-Entornos Virtuales (venv): Para aislar las dependencias del proyecto.
+🔹 Ejemplos interactivos visibles en Swagger UI para endpoints protegidos.
 
-✨ Características Principales
-Gestión detallada de clientes con información profesional (nombre, apellido, email, dirección, etc.).
+🔹 Control de permisos por acción (AllowAny, IsAuthenticated, IsAdminUser) según lógica de negocio.
 
-Gestión de pedidos asociados a cada cliente.
+🔹 Integración de CORS para consumo externo desde frontend React u otros clientes.
 
-API RESTful para operaciones CRUD (Crear, Leer, Actualizar, Eliminar) en modelos Customer y Order.
+## 📚 Documentación Interactiva (Swagger UI)
+Una vez en ejecución, accede a:
 
-Documentación interactiva de la API con Swagger UI, accesible a través de /api/schema/swagger-ui/.
+'http://127.0.0.1:8000/api/schema/swagger-ui/'
 
-⚙️ Configuración y Ejecución del Proyecto
-Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
+Desde allí podrás:
 
-1. Clonar el Repositorio
-Si aún no lo has hecho, clona este repositorio en tu máquina local:
+Ver todos los endpoints disponibles agrupados por dominio (customers, orders)
 
-git clone https://github.com/NicolasAndresCL/API_con_DRF.git
+Consultar detalles por método: GET, POST, PUT, DELETE
+
+Autenticarse y probar endpoints protegidos vía JWT
+
+## 🔐 Autenticación en Swagger UI:
+
+Haz clic en "Authorize" (candado en la esquina superior derecha).
+
+En tokenAuth, ingresa el token en formato:
+
+Token tu_token_de_autenticación
+Los candados se cerrarán para habilitar las operaciones protegidas.
+
+## ⚙️ Ejecución Local
+
+- Clonar el repositorio
+
+```git clone https://github.com/NicolasAndresCL/API_con_DRF.git
 cd API_con_DRF
+```
 
-
-2. Crear y Activar el Entorno Virtual
-Es fundamental usar un entorno virtual para gestionar las dependencias del proyecto de forma aislada.
-
+- Crear entorno virtual
+```
 python -m venv env
-
-Activa el entorno virtual:
-
-En Windows (CMD/PowerShell) *Yo uso CMDER:
-
-.\env\Scripts\activate
-
-3. Instalar Dependencias
-Con el entorno virtual activado, instala todas las librerías necesarias utilizando el archivo requirements.txt:
-
+source env/bin/activate  # En Linux/Mac
+.\env\Scripts\activate    # En Windows/CMDER
+```
+- Instalar dependencias
+```
 pip install -r requirements.txt
-
-4. Realizar Migraciones de Base de Datos
-Aplica las migraciones para crear las tablas de la base de datos (incluyendo los modelos Customer y Order):
-
+```
+- Aplicar migraciones
+```
 python manage.py migrate
-
-5. Crear un Superusuario
-Necesitarás un superusuario para acceder al panel de administración de Django y gestionar los datos:
-
+```
+- Crear superusuario
+```
 python manage.py createsuperuser
-
-Sigue las indicaciones en la terminal para establecer el nombre de usuario, email y contraseña.
-
-6. Ejecutar el Servidor de Desarrollo
-Finalmente, inicia el servidor de desarrollo de Django:
-
+```
+- Ejecutar servidor
+```
 python manage.py runserver
+```
+## 🧪 Testing y Buenas Prácticas
 
-El servidor estará disponible en http://127.0.0.1:8000/.
+✅ Versionado completo en rama dev con commits descriptivos estilo convencional.
 
-📚 Documentación de la API (Swagger UI)
-Una vez que el servidor esté en ejecución, puedes acceder a la documentación interactiva de la API (Swagger UI) en la siguiente URL:
+✅ Código modularizado por dominio, siguiendo principios de desacoplamiento lógico.
 
-http://127.0.0.1:8000/api/schema/swagger-ui/
+✅ Documentación Swagger autoactualizada al crear o modificar endpoints.
 
-Desde allí, podrás ver todos los endpoints disponibles (/api/customers/, /api/orders/, etc.), sus métodos (GET, POST, PUT, DELETE) y probar las solicitudes directamente desde el navegador.
+✅ Separación clara entre lógica de negocio, serialización y esquema/documentación.
 
-Autenticación en Swagger UI:
-Para probar los endpoints protegidos (ej. POST, PUT, DELETE), necesitarás autenticarte.
+✅ Uso de drf-spectacular para control absoluto del OpenAPI Schema.
 
-Haz clic en el botón "Authorize" (generalmente un candado verde en la esquina superior derecha).
+## 🤝 Contribuciones
+ Las mejoras técnicas y visuales son bienvenidas. Para contribuir:
 
-En la sección tokenAuth (apiKey), en el campo Value, ingresa tu token de autenticación con el prefijo "Token " (por ejemplo: Token tu_token_largo_aqui).
+bash
+```
+# Crear rama nueva
+git checkout -b feature/nueva-caracteristica
 
-Haz clic en "Authorize" para aplicar el token. Los candados junto a los endpoints deberían cerrarse.
+# Commit limpio y descriptivo
+git commit -m "feat: agregar validación de email en modelo Customer"
 
-🤝 Contribuciones
-Las contribuciones son bienvenidas. Si deseas contribuir, por favor:
+# Push y Pull Request
+```
+## 🌐 Portafolio Técnico
+Accede a la documentación completa en Swagger UI, ejemplos interactivos y despliegue dockerizado desde:
 
-Haz un "fork" del repositorio.
-
-Crea una nueva rama (git checkout -b feature/nueva-caracteristica).
-
-Realiza tus cambios y haz commits descriptivos.
-
-Abre un Pull Request.
-
-¡Disfruta desarrollando con tu API de Django DRF!
+🔗 https://nicolasandrescl.pythonanywhere.com
