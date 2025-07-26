@@ -4,6 +4,8 @@ from rest_framework.exceptions import ValidationError
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from .models import Customer
 from .serializers import CustomerSerializer
+from customers.tasks import export_active_customers
+from rest_framework.response import Response
 
 @extend_schema_view(
     list=extend_schema(summary="Listar clientes", description="Devuelve todos los clientes registrados.", tags=["Customers"]),
@@ -37,3 +39,15 @@ class CustomerView(viewsets.ModelViewSet):
         if has_pending_orders:
             raise ValidationError({"detail": "No se puede eliminar un cliente con pedidos pendientes."})
         instance.delete()
+
+# customers/views.py
+
+def trigger_export(request):
+    export_active_customers.delay()
+    return Response({"status": "Export en curso..."})
+
+from customers.tasks import saludo_desde_celery
+
+def trigger_tarea(request):
+    saludo_desde_celery.delay()
+    return Response({"status": "Tarea enviada a Celery"})

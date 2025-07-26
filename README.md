@@ -147,6 +147,17 @@ python manage.py runserver
 
 ✅ Uso de drf-spectacular para control absoluto del OpenAPI Schema.
 
+### 🔄 Configuración segura de Celery + Redis
+
+Variables definidas en `.env`:
+- `CELERY_BROKER_URL`: URL del broker (Redis en este caso)
+- `CELERY_RESULT_BACKEND`: Almacén de resultados (también Redis)
+- `CELERY_ACCEPT_CONTENT`: Formato aceptado (`json`)
+- `CELERY_TASK_SERIALIZER`: Serializador de tareas (`json`)
+
+Configuración cargada en `settings.py` vía `django-environ`, asegurando flexibilidad y seguridad 🔐
+
+
 ## 🤝 Contribuciones
  Las mejoras técnicas y visuales son bienvenidas. Para contribuir:
 
