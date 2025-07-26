@@ -24,3 +24,10 @@ class DecoratedTokenObtainPairView(TokenObtainPairView):
 
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
+    
+# customers/services/tasks.py
+from customers.services.tasks import task_saludo_desde_celery
+
+def lanzar_saludo():
+    return task_saludo_desde_celery.delay()
+
