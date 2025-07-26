@@ -7,3 +7,6 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = '__all__'
 
+
+class SaludoResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()

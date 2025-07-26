@@ -6,6 +6,7 @@ from .models import Customer
 from .serializers import CustomerSerializer
 from customers.tasks import export_active_customers
 from rest_framework.response import Response
+from customers.serializers import SaludoResponseSerializer
 
 @extend_schema_view(
     list=extend_schema(summary="Listar clientes", description="Devuelve todos los clientes registrados.", tags=["Customers"]),
@@ -51,3 +52,18 @@ from customers.tasks import saludo_desde_celery
 def trigger_tarea(request):
     saludo_desde_celery.delay()
     return Response({"status": "Tarea enviada a Celery"})
+
+# customers/views.py
+from customers.tasks import saludo_desde_celery
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@extend_schema(
+    responses=SaludoResponseSerializer,
+    summary="Lanza una tarea de prueba vía Celery",
+    tags=["Tareas Asíncronas"]
+)
+@api_view(["GET"])
+def trigger_saludo(request):
+    saludo_desde_celery.delay()
+    return Response({"message": "Tarea lanzada desde Celery"})
