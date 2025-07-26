@@ -1,5 +1,5 @@
-# 🧠 API RESTful en Django DRF: Gestión Modular de Clientes y Pedidos
-Este proyecto es una API RESTful desarrollada con Django y Django REST Framework, orientada a la gestión de clientes y sus pedidos, bajo una arquitectura modular por dominio. La documentación interactiva está generada automáticamente mediante drf-spectacular, agrupada en Swagger UI por funcionalidades.
+# 🧠 API RESTful en Django DRF: Gestión Modular de Clientes, Productos y Pedidos
+Este proyecto es una API RESTful desarrollada con Django y Django REST Framework, orientada a la gestión de clientes, productos y sus pedidos, bajo una arquitectura modular por dominio. La documentación interactiva está generada automáticamente mediante drf-spectacular, agrupada en Swagger UI por funcionalidades.
 
 ```
 API_con_DRF/
@@ -11,7 +11,7 @@ API_con_DRF/
 │   ├── views.py                # CustomerViewSet con permisos y validación
 │   ├── urls.py                 # Rutas /api/customers/
 │   ├── apps.py                 # Registro de esquema personalizado
-│   ├── auth_schema.py          # Vista decorada para token authentication (Swagger visible)
+│   ├── schema_auth.py          # Vista decorada para token authentication (Swagger visible)
 │   └── tests.py
 │
 ├── orders/                    # App para gestión de pedidos
@@ -48,22 +48,26 @@ API_con_DRF/
 ```
 ## 🚀 Tecnologías Utilizadas
 
-|Tecnología             	|Propósito                                                       |
-|:-------------------------:|----------------------------------------------------------------|
-|**Python**	                |Lenguaje principal del proyecto                                 |
-|**Django**	                |Framework web robusto y escalable                               |
-|**Django REST Framework**  |	Toolkit flexible para APIs                                   |
-|**drf-spectacular**	    |Generación automática de documentación OpenAPI 3.0 + Swagger UI |
-|**django-cors-headers**	|Configuración segura para CORS                                  |
-|**SQLite3**	            |Base de datos default para entorno local                        |
-|**Docker** (opcional)	    |Contenedorización para despliegue eficiente                     |
-|**Git**	                |Control de versiones con flujo main/dev y commits convencionales|
-|**venv**	                |Entornos virtuales para aislamiento limpio                      |
+|Tecnología             	 |Propósito                                                       |
+|:--------------------------:|----------------------------------------------------------------|
+|**Python**	                 |Lenguaje principal del proyecto                                 |
+|**Django**	                 |Framework web robusto y escalable                               |
+|**Django REST Framework**   |	Toolkit flexible para APIs                                    |
+|**drf-spectacular**	     |Generación automática de documentación OpenAPI 3.0 + Swagger UI |
+|**django-cors-headers**	 |Configuración segura para CORS                                  |
+|**rest_framework_simplejwt**|Autenticación segura basada en tokens JWT                       |
+|**django-environ**          |Configuración sensible vía .env                                 |
+|**MySQL**	                 |Soporte para entornos de desarrollo y producción                |
+|**Git**	                 |Control de versiones con flujo main/dev y commits convencionales|
+|**venv**	                 |Entornos virtuales para aislamiento limpio                      |
 
 ## ✨ Características Principales
-🔹 CRUD completo en modelos Customer y Order, con relaciones entre ellos.
 
-🔹 Modularización por dominio (customers, orders) mediante SimpleRouter y apps independientes.
+🔹 Autenticación JWT integrada vía djangorestframework-simplejwt, documentada en Swagger con ejemplos interactivos.
+
+🔹 Modularización por dominio: cada app (customers, products, orders) define sus modelos, vistas, rutas y esquema.
+
+🔹 Swagger agrupado por tags: "Customers", "Orders", "Products", "Authentication" — cada endpoint documentado por acción.
 
 🔹 Documentación extendida con @extend_schema, tags, summary, description por acción HTTP.
 
@@ -74,6 +78,10 @@ API_con_DRF/
 🔹 Control de permisos por acción (AllowAny, IsAuthenticated, IsAdminUser) según lógica de negocio.
 
 🔹 Integración de CORS para consumo externo desde frontend React u otros clientes.
+
+⚙️ Configuración segura en settings.py usando django-environ y .env excluido del repo por .gitignore.
+
+🧪 Esquema exportable (schema.yml) generado por drf-spectacular, válido para integraciones externas.
 
 ## 📚 Documentación Interactiva (Swagger UI)
 Una vez en ejecución, accede a:
@@ -88,15 +96,15 @@ Consultar detalles por método: GET, POST, PUT, DELETE
 
 Autenticarse y probar endpoints protegidos vía JWT
 
-## 🔐 Autenticación en Swagger UI:
+## 🔐 Formato correcto para el token:
 
-Haz clic en "Authorize" (candado en la esquina superior derecha).
+En jwtAuth, ingresá:
+```
+Bearer <access_token>
+Ejemplo:
 
-En tokenAuth, ingresa el token en formato:
-
-Token tu_token_de_autenticación
-Los candados se cerrarán para habilitar las operaciones protegidas.
-
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6...
+```
 ## ⚙️ Ejecución Local
 
 - Clonar el repositorio
@@ -156,3 +164,17 @@ git commit -m "feat: agregar validación de email en modelo Customer"
 Accede a la documentación completa en Swagger UI, ejemplos interactivos y despliegue dockerizado desde:
 
 🔗 https://nicolasandrescl.pythonanywhere.com
+
+Incluye:
+
+Swagger UI completo por dominio
+
+Documentación con ejemplos interactivos
+
+Validación en tiempo real de flujos autenticados
+
+API limpia y profesional para entrevistas técnicas o uso externo
+## 📄 Licencia
+Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
+## 📝 Notas Finales
+Este proyecto es un ejemplo de buenas prácticas en Django REST Framework, con un enfoque modular y una documentación interactiva que facilita su uso y comprensión. Ideal para desarrolladores que buscan una base sólida para construir APIs RESTful escalables y mantenibles.
