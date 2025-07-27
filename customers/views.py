@@ -46,22 +46,28 @@ class CustomerView(viewsets.ModelViewSet):
         instance.delete()
 
 
-@extend_schema(
-    summary="Lanza exportación de clientes activos vía Celery",
-    tags=["Tareas Asíncronas"]
-)
-@api_view(["GET"])
-def trigger_export(request):
-    task_exportar_clientes_activos.delay()
-    return Response({"status": "Exportación en curso..."})
-
-
-@extend_schema(
-    summary="Lanza saludo de prueba vía Celery",
-    responses=SaludoResponseSerializer,
-    tags=["Tareas Asíncronas"]
+@extend_schema_view(
+    get=extend_schema(
+        summary="Lanza saludo de prueba vía Celery",
+        responses=SaludoResponseSerializer,
+        tags=["Tasks"],
+        description="Dispara tarea asincrónica para verificar funcionamiento del worker Celery."
+    )
 )
 @api_view(["GET"])
 def trigger_saludo(request):
     task_saludo_desde_celery.delay()
     return Response({"message": "Tarea lanzada correctamente 🚀"})
+
+
+@extend_schema_view(
+    get=extend_schema(
+        summary="Exporta clientes activos vía Celery",
+        tags=["Tasks"],
+        description="Dispara tarea asincrónica que filtra clientes activos y retorna sus datos esenciales."
+    )
+)
+@api_view(["GET"])
+def trigger_export(request):
+    task_exportar_clientes_activos.delay()
+    return Response({"status": "Exportación en curso..."})

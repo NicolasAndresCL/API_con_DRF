@@ -165,3 +165,4 @@ CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", default="redis://localhost:6379
 CELERY_RESULT_BACKEND = env.str("CELERY_RESULT_BACKEND", default="redis://localhost:6379/0")
 CELERY_ACCEPT_CONTENT = env.list("CELERY_ACCEPT_CONTENT", default=["json"])
 CELERY_TASK_SERIALIZER = env.str("CELERY_TASK_SERIALIZER", default="json")
+CELERYD_FORCE_EXECV = True

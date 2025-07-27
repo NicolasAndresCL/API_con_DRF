@@ -1,38 +1,36 @@
-# customers/services/tasks.py
-
+import logging
 from celery import shared_task
 from customers.models import Customer
-import logging
 
 logger = logging.getLogger(__name__)
 
-# 📦 Lógica de negocio (reutilizable y testeable)
 def obtener_clientes_activos():
     """
     Retorna una lista de clientes activos con campos clave.
     """
-    clientes = Customer.objects.filter(is_active=True).values('id', 'name')
-    return list(clientes)
+    return list(
+        Customer.objects.filter(is_active=True).values("id", "name")
+    )
 
 def generar_saludo():
     """
-    Ejecuta una acción de saludo para verificar funcionamiento de tareas asincrónicas.
+    Mensaje para verificar funcionamiento de tareas asincrónicas.
     """
     mensaje = "Celery está funcionando correctamente 🚀"
-    logger.info(mensaje)  # Se puede ver en Flower o logs de worker
+    logger.info(mensaje)
     return "Hola desde la tarea asincrónica"
 
-# 🔁 Tareas registradas en Celery
 @shared_task(name="clientes.exportar_activos")
 def task_exportar_clientes_activos():
     """
     Tarea asincrónica que retorna clientes activos.
+    Puede ser visualizada en Flower y disparada desde Swagger.
     """
     return obtener_clientes_activos()
 
 @shared_task(name="clientes.saludo_test")
 def task_saludo_desde_celery():
     """
-    Tarea asincrónica de verificación rápida.
+    Tarea simple para testeo manual desde Swagger o admin Celery.
     """
     return generar_saludo()
