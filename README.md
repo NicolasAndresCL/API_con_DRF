@@ -157,6 +157,38 @@ Variables definidas en `.env`:
 
 Configuración cargada en `settings.py` vía `django-environ`, asegurando flexibilidad y seguridad 🔐
 
+## 🌀 Arquitectura de Tareas Asíncronas con Celery + Redis
+
+Este proyecto integra [Celery](https://docs.celeryq.dev/) y [Redis](https://redis.io/) para manejar operaciones asíncronas en un backend escalable y modular basado en Django REST Framework.
+
+## ⚙️ Refactorización Destacada
+
+- Lógica y registro de tareas centralizados en `customers/services/tasks.py`, incluyendo funciones reutilizables como `obtener_clientes_activos()` y `generar_saludo()`.
+- Las tareas están decoradas con `@shared_task` y nombradas (`clientes.exportar_activos`, `clientes.saludo_test`) para facilitar el seguimiento en logs y herramientas de monitoreo.
+- Celery autodetecta las tareas desde el paquete `customers/` sin necesidad de importaciones manuales.
+
+## 🧪 Mejoras de Desarrollo
+
+- Refactor de `celery.py` para ejecutar `django.setup()` antes de importar módulos que dependen de modelos.
+- Se resolvieron errores como `AppRegistryNotReady`, `WinError 5` y `WinError 6`, optimizando la ejecución en entornos Windows.
+- Redis funciona como broker, permitiendo ejecución diferida de tareas y endpoints no bloqueantes.
+
+## 🚀 Estructura Escalable
+
+- La lógica de negocio está desacoplada y es testeable, permitiendo que el registro de tareas se extienda a futuros módulos o apps.
+- Swagger incluye endpoints que activan tareas Celery de forma asíncrona (por ejemplo, `/api/trigger-saludo/`, `/api/trigger-export/`) y devuelven retroalimentación instantánea.
+- Compatible con Flower para visualización de tareas y seguimiento de estado.
+
+### 📦 Tareas de Ejemplo
+
+| Nombre de Tarea            | Descripción                                           | Ubicación                    |
+|----------------------------|-------------------------------------------------------|------------------------------|
+| `clientes.saludo_test`     | Verifica la disponibilidad del worker de Celery      | `services/tasks.py`          |
+| `clientes.exportar_activos`| Retorna clientes activos de forma asíncrona          | `services/tasks.py`          |
+
+Esta estructura prepara el backend para reportes en gran escala, procesamiento en segundo plano y expansión modular del dominio, manteniendo una base de código limpia y mantenible.
+
+
 
 ## 🤝 Contribuciones
  Las mejoras técnicas y visuales son bienvenidas. Para contribuir:
